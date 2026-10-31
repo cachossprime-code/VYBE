@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>VYBE — Comunidade, conversas e Auras</title>
+<style>
+:root{--bg:#090b14;--panel:#111522;--panel2:#171d2d;--line:#252d43;--text:#f4f5fb;--muted:#929bb2;--purple:#9b72ff;--pink:#ef73c7;--cyan:#69d9e8;--gold:#f3c66b;--green:#69d6a2}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% -10%,#29204c 0,transparent 32%),var(--bg);color:var(--text);font:15px Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input{font:inherit}button{cursor:pointer}.app{display:grid;grid-template-columns:250px minmax(0,1fr) 300px;max-width:1500px;margin:auto;min-height:100vh;gap:18px;padding:18px}
+.sidebar,.rightbar,.card{background:rgba(17,21,34,.92);border:1px solid var(--line);border-radius:18px}.sidebar{padding:20px 14px;position:sticky;top:18px;height:calc(100vh - 36px);display:flex;flex-direction:column}.logo{font-size:24px;font-weight:900;letter-spacing:2px;margin:2px 10px 28px}.logo span{color:var(--purple)}.nav-label{font-size:10px;color:#68728b;letter-spacing:1.7px;font-weight:800;margin:16px 12px 8px}.nav button{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;color:#aab2c7;padding:12px;border-radius:11px;text-align:left;margin:2px 0}.nav button:hover,.nav button.active{background:#28213e;color:white}.nav button.active{box-shadow:inset 3px 0 var(--purple)}.ico{width:22px;text-align:center;font-size:17px}.profile-mini{margin-top:auto;border-top:1px solid var(--line);padding:16px 6px 0;display:flex;gap:10px;align-items:center}.avatar{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#9b72ff,#e879c9);display:grid;place-items:center;font-weight:900;color:white}.muted{color:var(--muted)}.small{font-size:12px}.main{min-width:0;padding:4px 0}.top{display:flex;justify-content:space-between;align-items:center;margin:3px 0 20px}.top h1{font-size:25px;margin:0}.search{background:#111522;border:1px solid var(--line);border-radius:12px;padding:10px 13px;color:#aab2c7;width:min(270px,45vw)}.view{display:none}.view.active{display:block}.hero{padding:25px;background:linear-gradient(115deg,#282044,#17263a 75%,#142a35);border:1px solid #514077;border-radius:20px;position:relative;overflow:hidden}.hero:after{content:"✦";position:absolute;right:32px;top:2px;font-size:120px;color:#ffffff12}.eyebrow{font-size:11px;letter-spacing:1.8px;color:#c9b7ff;font-weight:800}.hero h2{font-size:30px;line-height:1.1;max-width:510px;margin:12px 0}.hero p{color:#c3c8d9;max-width:510px;line-height:1.6}.btn{border:0;border-radius:10px;padding:11px 16px;background:linear-gradient(100deg,var(--purple),#c47de8);color:white;font-weight:800}.btn.secondary{background:#252b40;border:1px solid #39425c}.btn.gold{background:linear-gradient(100deg,#b98739,#f3cf80);color:#201605}.section-head{display:flex;justify-content:space-between;align-items:center;margin:25px 0 13px}.section-head h3{margin:0;font-size:17px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.stat{background:#101624;border:1px solid #303954;border-radius:14px;padding:14px}.stat strong{font-size:22px;display:block}.stat span{font-size:11px;color:var(--muted)}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px}.card{padding:17px}.rank{display:flex;align-items:center;gap:14px}.rank-letter{font-size:37px;font-weight:950;color:var(--gold);text-shadow:0 0 22px #e6b95855}.progress{height:8px;border-radius:9px;background:#2a3042;overflow:hidden;margin:12px 0}.progress i{display:block;height:100%;width:68%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:9px}.post{margin-top:13px}.post-head{display:flex;gap:10px;align-items:center}.post p{line-height:1.55;color:#d4d8e5}.post-actions{display:flex;gap:18px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}.composer{display:flex;gap:10px;align-items:center}.composer input{flex:1;min-width:0;background:#0c101b;border:1px solid var(--line);border-radius:11px;padding:12px;color:white}.rightbar{padding:18px;height:max-content;position:sticky;top:18px}.rightbar h3{font-size:15px;margin:3px 0 14px}.person{display:flex;align-items:center;gap:10px;margin:13px 0}.person .avatar{width:34px;height:34px;border-radius:12px}.pill{font-size:10px;border-radius:30px;padding:4px 8px;background:#302548;color:#d5c4ff}.item{display:flex;gap:12px;align-items:center;margin:13px 0}.item-icon{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#352750,#1e3b50);display:grid;place-items:center;font-size:22px}.price{color:var(--gold);font-weight:800}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.tab{background:#151b2a;border:1px solid var(--line);color:#aeb6ca;border-radius:20px;padding:8px 13px}.tab.active{background:#30244c;color:white;border-color:#7254ad}.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.product{background:#121827;border:1px solid var(--line);border-radius:16px;padding:13px}.product-art{height:105px;border-radius:12px;background:radial-gradient(circle at 50% 30%,#8f65e8,#282144 58%,#151b2a);display:grid;place-items:center;font-size:43px;margin-bottom:12px}.product h4{margin:5px 0}.product button{width:100%;margin-top:10px}.community{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}.community:last-child{border:0}.community-art{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#593b82,#23495a);font-size:24px}.chat-layout{display:grid;grid-template-columns:220px 1fr;min-height:490px;overflow:hidden}.chat-list{border-right:1px solid var(--line);padding-right:12px}.chat-row{padding:12px;border-radius:12px;display:flex;gap:9px;align-items:center}.chat-row.active{background:#28213e}.chat-window{padding:14px;display:flex;flex-direction:column}.bubble{padding:11px 13px;border-radius:14px;background:#20283a;max-width:78%;margin:8px 0;line-height:1.45}.bubble.mine{background:#49366e;align-self:flex-end}.chat-compose{display:flex;gap:8px;margin-top:auto}.chat-compose input{flex:1;min-width:0;background:#0c101b;border:1px solid var(--line);border-radius:10px;padding:11px;color:white}.notice{background:#191f30;border:1px solid #303954;padding:12px;border-radius:12px;color:#b9c2d7;font-size:12px;line-height:1.5;margin-top:15px}
+@media(max-width:1100px){.app{grid-template-columns:210px 1fr}.rightbar{display:none}}@media(max-width:720px){.app{display:block;padding:10px 10px calc(105px + env(safe-area-inset-bottom))}.sidebar{position:fixed;z-index:5;left:8px;right:8px;bottom:8px;top:auto;height:62px;padding:5px 8px;border-radius:16px;background:#111522f5}.logo,.nav-label,.profile-mini{display:none}.nav{display:flex;justify-content:space-around}.nav button{width:auto;display:flex;flex-direction:column;gap:1px;padding:7px 9px;font-size:10px}.ico{font-size:18px}.top{margin:8px 3px 16px}.top h1{font-size:21px}.search{width:135px;font-size:12px}.hero{padding:20px}.hero h2{font-size:25px}.stats{gap:7px}.stat{padding:10px}.stat strong{font-size:18px}.grid2{grid-template-columns:1fr}.product-grid{grid-template-columns:repeat(2,1fr)}.chat-layout{grid-template-columns:1fr}.chat-list{display:none}.main{padding-bottom:12px}}
+
+.back-btn{display:none;border:1px solid var(--line);background:#171d2d;color:#fff;border-radius:10px;padding:9px 12px;margin-right:8px}
+.top-left{display:flex;align-items:center;min-width:0}.top-left h1{margin:0}
+.profile-card{display:flex;align-items:center;gap:15px;padding:20px}.profile-card .avatar{width:68px;height:68px;font-size:24px}
+.field{display:block;width:100%;margin:10px 0 5px;color:#c9cfe0;font-size:13px}
+.field-input{width:100%;background:#0c101b;border:1px solid var(--line);border-radius:11px;padding:13px;color:#fff;outline:none}
+.field-input:focus{border-color:var(--purple)}
+.auth-screen{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 80% 0%,#302354,transparent 40%),#090b14;display:grid;place-items:center;padding:18px;overflow:auto}
+.auth-box{width:min(100%,440px);background:#111522;border:1px solid #34304c;border-radius:22px;padding:24px;box-shadow:0 24px 80px #0008}
+.auth-logo{font-size:30px;font-weight:950;letter-spacing:3px;margin-bottom:6px}.auth-logo span{color:var(--purple)}
+.auth-box h1{margin:8px 0}.auth-box p{color:var(--muted);line-height:1.5}
+.auth-box .btn{width:100%;margin-top:14px}.auth-switch{display:block;text-align:center;margin-top:16px;color:#c8b4ff;background:none;border:0;width:100%;padding:10px}
+.friend-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.friend-row .avatar{width:42px;height:42px}
+@media(max-width:720px){.back-btn{display:inline-block}.top{gap:8px}.top-left{flex:1}.top h1{font-size:19px}.search{width: min(38vw,145px)}.auth-box{padding:20px}.app{padding-top:8px}}
+
+
+.action-btn{border:0;background:transparent;color:var(--muted);padding:5px 0;cursor:pointer;font-size:13px}
+.action-btn:hover{color:#fff}.action-btn.liked{color:#ff78b7}
+.post-actions{flex-wrap:wrap;align-items:center}
+.comments-area{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+.comment-item{padding:8px 0;border-bottom:1px solid #252d43;font-size:13px;line-height:1.45}
+.comment-form{display:flex;gap:8px;margin-top:10px}.comment-form input{flex:1;min-width:0;background:#0c101b;border:1px solid var(--line);border-radius:10px;padding:10px;color:white}
+.empty-chat{margin:auto;text-align:center;max-width:340px;padding:28px 16px}.empty-chat h3{margin:10px 0 5px}.empty-chat p{line-height:1.5}
+@media(max-width:720px){.post-actions{gap:13px}.action-btn{font-size:12px}.chat-layout{min-height:300px}}
+
+@media(max-width:720px){
+ .sidebar .nav{display:flex!important}
+ .sidebar .nav button[data-view="store"],.sidebar .nav button[data-view="premium"]{display:flex!important}
+ .sidebar{padding-bottom:5px}
+}
+
+/* Ajuste definitivo de enquadramento para iPhone */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  overflow-x: clip;
+}
+body { min-width: 0; }
+.app {
+  width: 100%;
+  max-width: 1500px;
+  min-width: 0;
+}
+.main, .view, .card, .hero, .rightbar, .sidebar {
+  min-width: 0;
+  max-width: 100%;
+}
+img, video, iframe, input, textarea, select { max-width: 100%; }
+
+@media (max-width: 720px) {
+  html, body { width: 100%; overflow-x: hidden; }
+  .app {
+    display: block;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 8px 12px calc(100px + env(safe-area-inset-bottom));
+    overflow-x: clip;
+  }
+  .main { width: 100%; max-width: 100%; padding: 0; }
+  .view, .view.active { width: 100%; max-width: 100%; }
+  .top {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0 14px;
+  }
+  .top-left {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .top-left h1 {
+    min-width: 0;
+    font-size: clamp(16px, 4.5vw, 19px);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  .back-btn {
+    flex: 0 0 auto;
+    margin-right: 6px;
+    padding: 8px 9px;
+    font-size: 12px;
+  }
+  .search {
+    flex: 0 1 38%;
+    width: 38%;
+    min-width: 0;
+    padding: 9px 8px;
+    font-size: 11px;
+  }
+  .hero { width: 100%; padding: 18px 16px; }
+  .hero h2 { font-size: clamp(22px, 6vw, 26px); overflow-wrap: anywhere; }
+  .hero p { overflow-wrap: anywhere; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .stat { min-width: 0; padding: 9px 7px; overflow-wrap: anywhere; }
+  .stat strong { font-size: clamp(16px, 5vw, 19px); }
+  .stat span { font-size: 10px; }
+  .grid2, .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card, .product { min-width: 0; padding: 13px; overflow-wrap: anywhere; }
+  .product-grid { gap: 8px; }
+  .product-art { height: 88px; }
+  .composer { flex-wrap: wrap; }
+  .composer input { flex: 1 1 55%; width: 55%; }
+  .composer .btn { flex: 0 0 auto; }
+  .community { min-width: 0; flex-wrap: wrap; }
+  .community > div:nth-child(2) { flex: 1 1 55% !important; min-width: 0; }
+  .community button { margin-left: auto; }
+  .post-head { min-width: 0; flex-wrap: wrap; }
+  .post-actions { gap: 10px; }
+  .action-btn { white-space: normal; }
+  .chat-layout { width: 100%; min-width: 0; }
+  .chat-window { min-width: 0; padding: 8px; }
+  .sidebar {
+    position: fixed;
+    z-index: 100;
+    left: 8px;
+    right: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    top: auto;
+    width: auto;
+    max-width: calc(100vw - 16px);
+    height: 68px;
+    min-height: 68px;
+    padding: 4px 5px;
+    overflow: hidden;
+  }
+  .sidebar .nav {
+    display: flex !important;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sidebar .nav::-webkit-scrollbar { display: none; }
+  .sidebar .nav button,
+  .sidebar .nav button[data-view="store"],
+  .sidebar .nav button[data-view="premium"] {
+    display: flex !important;
+    flex: 0 0 66px;
+    width: 66px;
+    min-width: 66px;
+    height: 58px;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    margin: 0;
+    padding: 5px 2px;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  .sidebar .nav button .ico { font-size: 18px; line-height: 20px; }
+  .auth-screen { padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom)); }
+  .auth-box { width: 100%; max-width: 440px; max-height: 100%; overflow-y: auto; }
+}
+@media (max-width: 380px) {
+  .app { padding-left: 9px; padding-right: 9px; }
+  .top-left h1 { font-size: 16px; }
+  .back-btn { padding: 7px; }
+  .search { flex-basis: 35%; width: 35%; }
+  .stats { gap: 5px; }
+  .stat { padding: 8px 5px; }
+}
+
+
+/* Central de suporte */
+.faq-item + .faq-item { border-top:1px solid var(--line); }
+.faq-question { width:100%; display:flex; justify-content:space-between; gap:12px; text-align:left; padding:15px 2px; border:0; background:transparent; color:#eef0f8; font-weight:750; font-size:14px; }
+.faq-question span { color:#c5a7ff; font-size:19px; }
+.faq-answer { color:#c3c8d9; font-size:13px; line-height:1.6; padding:0 4px 15px; }
+.support-chat-head { display:flex; align-items:center; gap:12px; padding-bottom:13px; border-bottom:1px solid var(--line); }
+.support-ticket-list { display:flex; gap:8px; flex-wrap:wrap; padding:12px 0; }
+.support-ticket { border:1px solid var(--line); background:#171d2d; color:#dce1ef; border-radius:10px; padding:8px 11px; font-size:12px; }
+.support-ticket.active { border-color:#9b72ff; background:#30244c; }
+.support-thread { display:flex; flex-direction:column; gap:8px; min-height:130px; max-height:360px; overflow:auto; padding:12px 2px; }
+.support-message { max-width:85%; padding:10px 12px; border-radius:13px; background:#20283a; color:#edf0fa; font-size:13px; line-height:1.5; overflow-wrap:anywhere; }
+.support-message.mine { align-self:flex-end; background:#49366e; }
+.support-message.admin { border:1px solid #7158a6; }
+.support-message small { display:block; opacity:.7; margin-top:4px; font-size:10px; }
+.support-compose { display:flex; gap:8px; margin-top:8px; }
+.support-compose input { flex:1; min-width:0; background:#0c101b; border:1px solid var(--line); border-radius:10px; padding:12px; color:white; }
+.empty-support { text-align:center; padding:18px 8px; }
+@media(max-width:720px) {
+  .support-compose { flex-wrap:wrap; }
+  .support-compose input { flex:1 1 65%; }
+  .support-compose .btn { flex:0 0 auto; }
+  .faq-question { font-size:13px; }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">VYBE<span>.</span></div>
+  <div class="nav-label">MENU PRINCIPAL</div>
+  <nav class="nav">
+    <button class="active" data-view="home"><span class="ico">⌂</span>Início</button>
+    <button data-view="messages"><span class="ico">◌</span>Conversas</button>
+    <button data-view="communities"><span class="ico">♧</span>Comunidades</button>
+    <button data-view="feed"><span class="ico">▤</span>Feed</button>
+    <button data-view="auras"><span class="ico">✦</span>Auras</button>
+    <button data-view="profile"><span class="ico">●</span>Perfil</button>
+    <button data-view="store"><span class="ico">◇</span>Loja</button>
+    <button data-view="premium"><span class="ico">♛</span>Premium</button>
+    <button data-view="support"><span class="ico">ⓘ</span>Suporte</button>
+  </nav>
+  <div class="profile-mini"><div class="avatar">L</div><div><strong>Laura</strong><div class="small muted">Classe A · 3.420 Aura</div></div></div>
+</aside>
+
+<main class="main">
+  <header class="top"><div class="top-left"><button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Voltar">← Voltar</button><h1 id="pageTitle">Início</h1></div><input class="search" id="globalSearch" placeholder="⌕  Buscar pessoas"></header>
+
+  <section class="view active" id="home">
+    <div class="hero">
+      <div class="eyebrow">SUA COMUNIDADE. SUA IDENTIDADE.</div>
+      <h2>Converse, compartilhe e conquiste seu espaço.</h2>
+      <p>Um lugar para encontrar pessoas, participar de comunidades e construir sua reputação através das Auras.</p>
+      <button class="btn" onclick="showView('communities')">Explorar comunidades</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><strong>3.420</strong><span>✦ Seus pontos de Aura</span></div>
+      <div class="stat"><strong>A</strong><span>Sua classificação atual</span></div>
+      <div class="stat"><strong>08</strong><span>Conquistas desbloqueadas</span></div>
+    </div>
+    <div class="section-head"><h3>Seu progresso de Aura</h3><button class="tab" onclick="showView('auras')">Ver ranking →</button></div>
+    <div class="card">
+      <div class="rank"><div class="rank-letter">A</div><div><strong>Classe A</strong><div class="small muted">Você está evoluindo muito bem.</div></div><span class="pill" style="margin-left:auto">Próximo: S</span></div>
+      <div class="progress"><i></i></div><div class="small muted">3.420 / 3.500 pontos para alcançar a próxima faixa de teste.</div>
+    </div>
+    <div class="section-head"><h3>O que está acontecendo</h3><button class="tab" onclick="showView('feed')">Ver feed →</button></div>
+    <div class="card post"><div class="post-head"><div class="avatar">M</div><div><strong>Marina Costa</strong><div class="small muted">Comunidade Criadores · há 12 min</div></div><span class="pill" style="margin-left:auto">Classe S</span></div><p>Finalmente completei meu primeiro desafio de criatividade! Foi muito mais difícil do que eu imaginava. ✨</p><div class="post-actions" data-post-id="home-demo"><button class="action-btn like-btn" onclick="toggleLike('home-demo',this)">♡ <span class="like-count">128</span> curtidas</button><button class="action-btn" onclick="toggleComments('home-demo',this)">◯ <span class="comment-count">24</span> comentários</button><button class="action-btn" onclick="sharePost('home-demo')">↗ Compartilhar</button></div><div class="comments-area" id="comments-home-demo" hidden></div></div>
+  </section>
+
+  <section class="view" id="messages">
+    <div class="card chat-layout" id="chatArea">
+      <div class="chat-list" id="chatList"><strong>Mensagens</strong><p class="small muted" style="padding:12px 4px">Suas conversas aparecerão aqui quando você iniciar uma.</p></div>
+      <div class="chat-window" id="chatWindow">
+        <div class="empty-chat"><div style="font-size:42px">💬</div><h3>Nenhuma conversa por enquanto</h3><p class="muted">Quando você iniciar uma conversa real com alguém, ela aparecerá aqui. Não vamos inventar mensagens ou contatos.</p><button class="btn secondary" onclick="showView('profile')">Encontrar amigos</button></div>
+      </div>
+    </div>
+    <div class="notice">As conversas ainda não são sincronizadas pela internet nesta versão. O chat online será conectado ao backend depois.</div>
+  </section>
+
+  <section class="view" id="communities">
+    <div class="hero"><div class="eyebrow">ENCONTRE SUA TURMA</div><h2>Comunidades para todo tipo de interesse.</h2><p>Crie grupos, organize canais, converse e construa um espaço seu.</p><button class="btn" onclick="alert('No produto final, aqui será possível criar uma comunidade.')">＋ Criar comunidade</button></div>
+    <div class="section-head"><h3>Em destaque</h3><span class="small muted">Comunidades abertas</span></div>
+    <div class="card">
+      <div class="community"><div class="community-art">🎨</div><div style="flex:1"><strong>Criadores & Arte</strong><div class="small muted">Arte, ideias e projetos · 2.4 mil membros</div></div><button class="btn secondary" onclick="join(this)">Participar</button></div>
+      <div class="community"><div class="community-art">🎧</div><div style="flex:1"><strong>Música & Cultura</strong><div class="small muted">Compartilhe o que você ouve · 1.8 mil membros</div></div><button class="btn secondary" onclick="join(this)">Participar</button></div>
+      <div class="community"><div class="community-art">📸</div><div style="flex:1"><strong>Fotografia</strong><div class="small muted">Dicas, desafios e inspiração · 980 membros</div></div><button class="btn secondary" onclick="join(this)">Participar</button></div>
+      <div class="community"><div class="community-art">🌌</div><div style="flex:1"><strong>Universo Geek</strong><div class="small muted">Filmes, séries e cultura pop · 5.1 mil membros</div></div><button class="btn secondary" onclick="join(this)">Participar</button></div>
+    </div>
+    <div class="section-head"><h3>Planos para administradores</h3></div>
+    <div class="grid2"><div class="card"><span class="pill">PRO</span><h3>Comunidade Pro</h3><strong style="font-size:24px">R$ 19,90<span class="small muted">/mês</span></strong><p class="small muted">Canais extras, cargos personalizados, estatísticas e ferramentas avançadas.</p><button class="btn secondary" onclick="alert('Assinatura demonstrativa.')">Conhecer plano</button></div><div class="card"><span class="pill">BUSINESS</span><h3>Comunidade Business</h3><strong style="font-size:24px">R$ 49,90<span class="small muted">/mês</span></strong><p class="small muted">Gestão avançada, equipe de moderação, relatórios e identidade visual ampliada.</p><button class="btn secondary" onclick="alert('Assinatura demonstrativa.')">Conhecer plano</button></div></div>
+  </section>
+
+  <section class="view" id="feed">
+    <div class="card"><div class="composer"><div class="avatar">L</div><input id="postInput" placeholder="O que você quer compartilhar?"><button class="btn" onclick="publishPost()">Publicar</button></div><div class="small muted" style="margin:10px 0 0 52px">Texto, fotos e vídeos · respeite as regras da comunidade</div></div>
+    <div id="feedPosts">
+      <div class="card post"><div class="post-head"><div class="avatar">R</div><div><strong>Rafael Lima</strong><div class="small muted">Hoje às 14:32 · Comunidade Fotografia</div></div><span class="pill" style="margin-left:auto">Classe SS</span></div><p>Pequenos detalhes fazem uma grande diferença. Qual dessas fotos vocês preferem? 📷</p><div style="height:130px;border-radius:12px;background:linear-gradient(120deg,#243a55,#74518a,#d29b74);display:grid;place-items:center;font-size:40px">🌄</div><div class="post-actions" style="margin-top:12px" data-post-id="feed-demo"><button class="action-btn like-btn" onclick="toggleLike('feed-demo',this)">♡ <span class="like-count">86</span> curtidas</button><button class="action-btn" onclick="toggleComments('feed-demo',this)">◯ <span class="comment-count">12</span> comentários</button><button class="action-btn" onclick="sharePost('feed-demo')">↗ Compartilhar</button></div><div class="comments-area" id="comments-feed-demo" hidden></div></div>
+    </div>
+  </section>
+
+  <section class="view" id="auras">
+    <div class="hero"><div class="eyebrow">RECONHECIMENTO CONQUISTADO</div><h2>Sua Aura representa sua trajetória.</h2><p>Participe de desafios, contribua com a comunidade e evolua. Classificações não podem ser compradas.</p></div>
+    <div class="section-head"><h3>Classificações</h3><span class="small muted">Faixas ilustrativas</span></div>
+    <div class="card">
+      <div class="rank"><div class="rank-letter" style="color:#aab2c7">D</div><div><strong>Classe D</strong><div class="small muted">Início da jornada · 0–499</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <div class="rank"><div class="rank-letter" style="color:#69b7ed">C</div><div><strong>Classe C</strong><div class="small muted">Primeiros passos · 500–1.499</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <div class="rank"><div class="rank-letter" style="color:#69d6a2">B</div><div><strong>Classe B</strong><div class="small muted">Evolução · 1.500–3.499</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <div class="rank"><div class="rank-letter" style="color:#b38cff">A</div><div><strong>Classe A · Você</strong><div class="small muted">Alto desempenho · 3.500–6.999 (faixa em revisão)</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <div class="rank"><div class="rank-letter">S</div><div><strong>Classe Especial S</strong><div class="small muted">7.000–11.999</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <div class="rank"><div class="rank-letter" style="color:#f39a65">SS</div><div><strong>Classe Especial SS</strong><div class="small muted">12.000–19.999</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <div class="rank"><div class="rank-letter" style="color:#f07885">SSS</div><div><strong>Classe Especial SSS</strong><div class="small muted">20.000–29.999</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <div class="rank"><div class="rank-letter" style="color:#d8b4fe">K</div><div><strong>Nível Supremo</strong><div class="small muted">Somente 10 vagas · seleção competitiva</div></div></div>
+    </div>
+    <div class="section-head"><h3>Desafios disponíveis</h3></div>
+    <div class="grid2"><div class="card"><span class="pill">CRIATIVIDADE</span><h3>Mostre sua ideia</h3><p class="small muted">Publique algo original e conte como você criou.</p><strong class="price">Até +30 Aura</strong><p><button class="btn secondary" onclick="alert('Desafio demonstrativo. Envio e avaliação serão implementados no backend.')">Ver desafio</button></p></div><div class="card"><span class="pill">COMUNIDADE</span><h3>Ajude alguém</h3><p class="small muted">Compartilhe conhecimento e contribua com uma comunidade.</p><strong class="price">Até +10 Aura</strong><p><button class="btn secondary" onclick="alert('Desafio demonstrativo.')">Ver desafio</button></p></div></div>
+    <div class="notice">Os pontos, faixas e critérios são exemplos de protótipo. O sistema real precisará de regras transparentes, moderação, prevenção contra fraude e mecanismo de recurso.</div>
+  </section>
+
+
+  <section class="view" id="profile">
+    <div class="card profile-card"><div class="avatar" id="profileAvatar">V</div><div style="min-width:0"><h2 id="profileName" style="margin:0 0 5px">Seu perfil</h2><div class="small muted" id="profileHandle">@usuario</div><div class="small muted" id="profileId">ID: —</div></div></div>
+    <div class="section-head"><h3>Sobre você</h3><button class="tab" onclick="editProfile()">Editar</button></div>
+    <div class="card"><p id="profileBio" class="muted">Conte um pouco sobre você.</p><div class="stats"><div class="stat"><strong id="friendCount">0</strong><span>Amigos</span></div><div class="stat"><strong>3.420</strong><span>Aura (demo)</span></div><div class="stat"><strong>A</strong><span>Classe (demo)</span></div></div></div>
+    <div class="section-head"><h3>Adicionar amigos</h3></div>
+    <div class="card"><p class="small muted">Encontre pessoas pelo nome ou pelo ID VYBE.</p><label class="field" for="friendSearch">Nome ou ID</label><input class="field-input" id="friendSearch" placeholder="Ex.: VYB-482193 ou Marina"><button class="btn" onclick="searchFriends()">Buscar</button><div id="friendResults"></div></div>
+    <div class="section-head"><h3>Seus amigos</h3></div><div class="card" id="friendList"><p class="muted small">Você ainda não adicionou amigos.</p></div>
+    <button class="btn secondary" style="margin-top:16px;width:100%" onclick="logout()">Sair da conta</button>
+  </section>
+  <section class="view" id="store">
+    <div class="hero"><div class="eyebrow">SUA IDENTIDADE, SEU ESTILO</div><h2>Uma loja para deixar tudo com a sua cara.</h2><p>Itens digitais e cosméticos. Nenhuma compra concede pontos, vitórias ou classificação.</p></div>
+    <div class="tabs"><button class="tab active" onclick="filterStore('all',this)">Tudo</button><button class="tab" onclick="filterStore('Perfil',this)">Perfil</button><button class="tab" onclick="filterStore('Chat',this)">Conversas</button><button class="tab" onclick="filterStore('Figurinhas',this)">Figurinhas</button><button class="tab" onclick="filterStore('Aura',this)">Aura</button></div>
+    <div class="product-grid" id="products">
+      <div class="product" data-category="Perfil"><div class="product-art">💠</div><h4>Moldura Nebulosa</h4><div class="small muted">Perfil · cosmético</div><div class="price">R$ 7,90</div><button class="btn secondary" onclick="buy('Moldura Nebulosa')">Comprar</button></div>
+      <div class="product" data-category="Chat"><div class="product-art" style="background:linear-gradient(135deg,#234e64,#32244f)">🌙</div><h4>Tema Noturno</h4><div class="small muted">Conversas · tema</div><div class="price">R$ 4,90</div><button class="btn secondary" onclick="buy('Tema Noturno')">Comprar</button></div>
+      <div class="product" data-category="Figurinhas"><div class="product-art" style="background:linear-gradient(135deg,#68406e,#a45c77)">✨</div><h4>Pack Brilhos</h4><div class="small muted">Figurinhas · 24 itens</div><div class="price">R$ 2,90</div><button class="btn secondary" onclick="buy('Pack Brilhos')">Comprar</button></div>
+      <div class="product" data-category="Aura"><div class="product-art" style="background:linear-gradient(135deg,#49376d,#b1854e)">🏅</div><h4>Cartão de Conquista</h4><div class="small muted">Aura · decorativo</div><div class="price">R$ 9,90</div><button class="btn secondary" onclick="buy('Cartão de Conquista')">Comprar</button></div>
+      <div class="product" data-category="Perfil"><div class="product-art" style="background:linear-gradient(135deg,#284d57,#56428a)">🪐</div><h4>Fundo Órbita</h4><div class="small muted">Perfil · plano de fundo</div><div class="price">R$ 5,90</div><button class="btn secondary" onclick="buy('Fundo Órbita')">Comprar</button></div>
+      <div class="product" data-category="Chat"><div class="product-art" style="background:linear-gradient(135deg,#714c42,#5b3d78)">💬</div><h4>Balões Neon</h4><div class="small muted">Conversas · tema</div><div class="price">R$ 8,90</div><button class="btn secondary" onclick="buy('Balões Neon')">Comprar</button></div>
+    </div>
+    <div class="notice">Compras são demonstrativas neste protótipo. Não há cobrança real nem processamento de pagamentos.</div>
+  </section>
+
+  <section class="view" id="premium">
+    <div class="hero"><div class="eyebrow">MAIS PERSONALIZAÇÃO. MAIS POSSIBILIDADES.</div><h2>Escolha como quer viver o VYBE.</h2><p>As funções essenciais de comunicação permanecem gratuitas para todos.</p></div>
+    <div class="grid2" style="margin-top:15px">
+      <div class="card"><span class="pill">GRATUITO</span><h2>Free</h2><strong style="font-size:27px">R$ 0</strong><p class="small muted">Mensagens, chamadas, mídia, feed, comunidades básicas e Auras.</p><button class="btn secondary" style="width:100%" onclick="alert('Você já está no plano gratuito.')">Plano atual</button></div>
+      <div class="card" style="border-color:#7254ad"><span class="pill">POPULAR</span><h2>Premium</h2><strong style="font-size:27px">R$ 14,90<span class="small muted">/mês</span></strong><p class="small muted">Sem anúncios, temas, molduras, efeitos e personalização extra.</p><button class="btn" style="width:100%" onclick="subscribe('Premium')">Escolher Premium</button></div>
+      <div class="card"><span class="pill">AVANÇADO</span><h2>Premium Plus</h2><strong style="font-size:27px">R$ 29,90<span class="small muted">/mês</span></strong><p class="small muted">Tudo do Premium, estatísticas e ferramentas adicionais para criadores.</p><button class="btn" style="width:100%" onclick="subscribe('Premium Plus')">Escolher Plus</button></div>
+      <div class="card"><span class="pill">EDIÇÃO DE LANÇAMENTO</span><h2>Membro fundador</h2><strong style="font-size:27px">R$ 199,90</strong><p class="small muted">Selo fundador e itens cosméticos especiais. Condições e benefícios definidos no lançamento.</p><button class="btn gold" style="width:100%" onclick="subscribe('Membro fundador')">Conhecer edição</button></div>
+    </div>
+    <div class="notice">Planos e preços são propostas ilustrativas. Antes do lançamento, serão revisados conforme custos, taxas das lojas, regras de assinatura e testes com usuários. Nenhum plano concede Aura ou vantagem competitiva.</div>
+  </section>
+
+  <section class="view" id="support">
+    <div class="hero">
+      <div class="eyebrow">CENTRAL DE AJUDA VYBE</div>
+      <h2>Como podemos ajudar?</h2>
+      <p>Encontre respostas rápidas para dúvidas comuns. Se não resolver, abra um atendimento privado com o administrador.</p>
+      <button class="btn" onclick="openSupportChat()"> <span aria-hidden="true">✉</span> Falar com Admin</button>
+    </div>
+    <div class="section-head"><h3>Perguntas frequentes</h3><span class="small muted">Toque para ver a solução</span></div>
+    <div class="card" id="supportFaq">
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Não consigo entrar na minha conta <span>＋</span></button><div class="faq-answer" hidden>Confira se o e-mail e a senha estão corretos. Se esqueceu a senha, use a opção “Esqueci minha senha” quando estiver disponível. Se continuar sem acesso, fale com o Admin para receber ajuda.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Meu e-mail já está cadastrado <span>＋</span></button><div class="faq-answer" hidden>Já existe uma conta vinculada a esse endereço. Tente entrar na conta existente ou recuperar a senha. Não é necessário criar uma segunda conta com o mesmo e-mail.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Quero trocar meu nome de usuário <span>＋</span></button><div class="faq-answer" hidden>Acesse Perfil e procure a opção de edição. Escolha um nome disponível, respeitando as regras da comunidade. Se a edição ainda não estiver disponível, solicite ajuda pelo suporte.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Não consigo enviar mensagens <span>＋</span></button><div class="faq-answer" hidden>Verifique sua conexão com a internet e tente novamente. Confira também se a pessoa bloqueou você ou se existe alguma restrição na sua conta. Nesta versão de demonstração, as mensagens ainda não são enviadas pela internet.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Minhas fotos ou vídeos não carregam <span>＋</span></button><div class="faq-answer" hidden>Verifique sua conexão, o tamanho do arquivo e as permissões de fotos e câmera do celular. Tente novamente. O envio online será ativado após a integração do servidor.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Quero denunciar um usuário <span>＋</span></button><div class="faq-answer" hidden>Guarde informações sobre o perfil ou conteúdo e envie um chamado ao Admin, explicando o ocorrido. A ferramenta de denúncia e análise será conectada na versão online.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Fui suspenso ou bloqueado <span>＋</span></button><div class="faq-answer" hidden>Leia a notificação recebida para entender o motivo. Se acredita que houve um engano, abra um chamado e solicite uma revisão. Não crie outra conta para contornar uma suspensão.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Minha Aura ou classificação está incorreta <span>＋</span></button><div class="faq-answer" hidden>Confira seu perfil e o histórico de atividades. Se encontrar uma diferença, envie ao suporte uma descrição do problema e, se possível, uma captura de tela. Pontos não podem ser comprados.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Minha compra não apareceu <span>＋</span></button><div class="faq-answer" hidden>Confira o histórico da compra e a confirmação do pagamento. Evite comprar novamente antes de verificar a primeira transação. Se o item não aparecer, envie o comprovante pelo chamado. As compras nesta versão são demonstrativas.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Quero excluir minha conta <span>＋</span></button><div class="faq-answer" hidden>Quando a opção estiver disponível, acesse Configurações de conta e siga as etapas de exclusão. Se não conseguir acessar a conta, peça orientação ao suporte.</div></div>
+    </div>
+
+    <div class="section-head"><h3>Meus atendimentos</h3><span class="small muted">Canal separado das conversas pessoais</span></div>
+    <div class="card" id="supportChatCard">
+      <div class="support-chat-head">
+        <div class="item-icon">🎧</div>
+        <div style="flex:1;min-width:0"><strong>Atendimento VYBE</strong><div class="small muted">Canal oficial de suporte · privado</div></div>
+        <span class="pill">Suporte</span>
+      </div>
+      <div id="supportTicketList" class="support-ticket-list"></div>
+      <div id="supportThread" class="support-thread">
+        <div class="empty-support"><div style="font-size:34px">💬</div><strong>Nenhum chamado aberto</strong><p class="small muted">Se as respostas acima não resolveram, toque em “Falar com Admin” para iniciar um atendimento.</p></div>
+      </div>
+      <form class="support-compose" id="supportCompose" onsubmit="sendSupportMessage(event)" hidden>
+        <input id="supportMessageInput" maxlength="1500" placeholder="Escreva sua mensagem para o suporte..." required>
+        <button class="btn" type="submit">Enviar</button>
+      </form>
+      <div class="notice">Este protótipo salva chamados somente neste navegador. Para receber e responder mensagens entre celulares, ainda precisamos conectar o Firebase. Não envie senhas, códigos de acesso ou dados bancários.</div>
+    </div>
+    <div class="card" id="supportAdminPanel" hidden style="margin-top:15px">
+      <div class="section-head" style="margin-top:0"><h3>Painel do Admin</h3><span class="pill">ADM / GM</span></div>
+      <p class="small muted">Caixa de entrada local de chamados. No produto online, o acesso será protegido por permissões administrativas no servidor.</p>
+      <div id="adminTicketList" class="support-ticket-list"></div>
+      <div id="adminReplyArea" hidden>
+        <div id="adminSelectedThread" class="support-thread"></div>
+        <form class="support-compose" onsubmit="sendAdminReply(event)">
+          <input id="adminReplyInput" maxlength="1500" placeholder="Responder ao usuário..." required>
+          <button class="btn" type="submit">Responder</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<aside class="rightbar">
+  <h3>Seu resumo</h3><div class="rank"><div class="avatar">L</div><div><strong>Laura</strong><div class="small muted">Membro desde hoje</div></div></div>
+  <div class="stats" style="grid-template-columns:1fr 1fr"><div class="stat"><strong>3.420</strong><span>Aura</span></div><div class="stat"><strong>A</strong><span>Classe</span></div></div>
+  <div class="section-head"><h3>Ranking da semana</h3><span class="small muted">Ver todos</span></div>
+  <div class="person"><div class="avatar">M</div><div style="flex:1"><strong>Marina</strong><div class="small muted">4.820 Aura</div></div><span class="pill">S</span></div>
+  <div class="person"><div class="avatar" style="background:linear-gradient(135deg,#3e9b9c,#4051a0)">R</div><div style="flex:1"><strong>Rafael</strong><div class="small muted">4.100 Aura</div></div><span class="pill">A</span></div>
+  <div class="person"><div class="avatar" style="background:linear-gradient(135deg,#bd7a4e,#804e89)">J</div><div style="flex:1"><strong>Julia</strong><div class="small muted">3.890 Aura</div></div><span class="pill">A</span></div>
+  <div class="section-head"><h3>Loja em destaque</h3><button class="tab" onclick="showView('store')">Ver loja</button></div>
+  <div class="item"><div class="item-icon">💠</div><div><strong>Moldura Nebulosa</strong><div class="small price">R$ 7,90</div></div></div>
+  <div class="item"><div class="item-icon">🌙</div><div><strong>Tema Noturno</strong><div class="small price">R$ 4,90</div></div></div>
+  <div class="notice">🔒 Mensagens, chamadas, compartilhamento de tela e envio de fotos e vídeos são gratuitos em todos os planos.</div>
+</aside>
+</div>
+<script>
+const titles={home:'Início',messages:'Conversas',communities:'Comunidades',feed:'Feed',auras:'Classificações de Aura',store:'Loja virtual',premium:'Planos e assinaturas',profile:'Meu perfil',support:'Central de Ajuda'};
+let viewHistory=['home'];
+function showView(id,fromPop=false){if(!document.getElementById(id))return;const current=document.querySelector('.view.active')?.id;if(current&&current!==id&&!fromPop)viewHistory.push(current);document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));document.getElementById('pageTitle').textContent=titles[id]||'VYBE';if(id==='support'&&typeof renderSupport==='function'&&currentUser)renderSupport();window.scrollTo({top:0,behavior:'smooth'});}
+function goBack(){if(viewHistory.length){const previous=viewHistory.pop();showView(previous,true)}else showView('home',true)}
+
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+function join(btn){btn.textContent='Participando ✓';btn.classList.remove('secondary');btn.disabled=true}
+function buy(name){alert('Produto demonstrativo: '+name+'. A loja ainda não processa pagamentos reais.')}
+function subscribe(name){alert('Plano demonstrativo: '+name+'. O pagamento real será integrado na versão online.')}
+function filterStore(cat,btn){document.querySelectorAll('.tabs .tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.product').forEach(p=>p.style.display=(cat==='all'||p.dataset.category===cat)?'block':'none')}
+function publishPost(){
+ const input=document.getElementById('postInput');if(!input.value.trim())return;
+ const id='post-'+Date.now(),name=currentUser?.name||'Meu perfil',initial=(name[0]||'V').toUpperCase();
+ const el=document.createElement('div');el.className='card post';el.dataset.postId=id;
+ const head=document.createElement('div');head.className='post-head';head.innerHTML='<div class="avatar">'+safeText(initial)+'</div><div><strong>'+safeText(name)+'</strong><div class="small muted">Agora · Seu feed</div></div>';
+ const p=document.createElement('p');p.textContent=input.value;
+ const actions=document.createElement('div');actions.className='post-actions';actions.dataset.postId=id;
+ actions.innerHTML='<button class="action-btn like-btn" onclick="toggleLike(\''+id+'\',this)">♡ <span class="like-count">0</span> curtidas</button><button class="action-btn" onclick="toggleComments(\''+id+'\',this)">◯ <span class="comment-count">0</span> comentários</button><button class="action-btn" onclick="sharePost(\''+id+'\')">↗ Compartilhar</button>';
+ const comments=document.createElement('div');comments.className='comments-area';comments.id='comments-'+id;comments.hidden=true;
+ el.append(head,p,actions,comments);document.getElementById('feedPosts').prepend(el);input.value='';
+ savePostState(id,{liked:false,likes:0,comments:[]});
+}
+const POST_STATE_KEY='vybe_post_state';
+function getPostStates(){try{return JSON.parse(localStorage.getItem(POST_STATE_KEY)||'{}')}catch(e){return {}}}
+function savePostState(id,state){const all=getPostStates();all[id]=state;localStorage.setItem(POST_STATE_KEY,JSON.stringify(all))}
+function getPostState(id,initialLikes=0,initialComments=0){const all=getPostStates();return all[id]||{liked:false,likes:initialLikes,comments:[],baseComments:initialComments}}
+function toggleLike(id,button){
+ const actions=button.closest('.post-actions'),countEl=button.querySelector('.like-count'),base=parseInt(countEl?.textContent||'0',10);
+ const state=getPostState(id,base);state.liked=!state.liked;state.likes=Math.max(0,(state.likes??base)+(state.liked?1:-1));savePostState(id,state);
+ button.classList.toggle('liked',state.liked);button.innerHTML=(state.liked?'♥':'♡')+' <span class="like-count">'+state.likes+'</span> curtidas';
+}
+function toggleComments(id,button){
+ const area=document.getElementById('comments-'+id);if(!area)return;
+ const actions=button.closest('.post-actions'),count=parseInt(button.querySelector('.comment-count')?.textContent||'0',10),state=getPostState(id,0,count);
+ area.hidden=!area.hidden;
+ if(!area.hidden)renderComments(id);
+}
+function renderComments(id){
+ const area=document.getElementById('comments-'+id);if(!area)return;
+ const state=getPostState(id),items=state.comments||[];
+ area.innerHTML=items.map(c=>'<div class="comment-item"><strong>'+safeText(c.name)+'</strong> '+safeText(c.text)+'</div>').join('')+
+ '<form class="comment-form" onsubmit="addComment(event,\''+id+'\')"><input id="comment-input-'+id+'" maxlength="500" placeholder="Escreva um comentário..." required><button class="btn" type="submit">Enviar</button></form>';
+}
+function addComment(event,id){
+ event.preventDefault();const input=document.getElementById('comment-input-'+id),value=input.value.trim();if(!value)return;
+ const state=getPostState(id);state.comments=state.comments||[];state.comments.push({name:currentUser?.name||'Você',text:value});savePostState(id,state);
+ const countEl=document.querySelector('[data-post-id="'+id+'"] .comment-count');if(countEl)countEl.textContent=String((parseInt(countEl.textContent||'0',10)||0)+1);
+ renderComments(id);
+}
+async function sharePost(id){
+ const url=location.href.split('#')[0]+'#'+id;
+ try{if(navigator.share)await navigator.share({title:'Post no VYBE',url});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url);alert('Link copiado!')}else{prompt('Copie o link do post:',url)}}catch(e){if(e.name!=='AbortError')alert('Não foi possível compartilhar neste dispositivo.')}
+}
+
+// Central de suporte VYBE: protótipo local, separado das conversas pessoais.
+const SUPPORT_ADMIN_EMAIL = 'anoxossuport@gmail.com';
+const SUPPORT_STORAGE_KEY = 'vybe_support_tickets_v1';
+let selectedSupportTicketId = null;
+let selectedAdminTicketId = null;
+
+function getSupportTickets(){
+  try { return JSON.parse(localStorage.getItem(SUPPORT_STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function saveSupportTickets(tickets){
+  localStorage.setItem(SUPPORT_STORAGE_KEY, JSON.stringify(tickets));
+}
+function supportUserKey(){
+  return (currentUser?.email || 'visitante').toLowerCase();
+}
+function toggleFaq(button){
+  const answer = button.nextElementSibling;
+  const opening = answer.hidden;
+  answer.hidden = !opening;
+  const marker = button.querySelector('span');
+  if(marker) marker.textContent = opening ? '−' : '＋';
+}
+function openSupportChat(){
+  if(!currentUser){
+    alert('Entre na sua conta para abrir um chamado de suporte.');
+    showAuth('login');
+    return;
+  }
+  const tickets = getSupportTickets().filter(t => t.userEmail === supportUserKey());
+  if(!tickets.length){
+    const ticket = {
+      id:'SUP-' + Date.now().toString().slice(-8),
+      userEmail:supportUserKey(),
+      userName:currentUser.name || 'Usuário',
+      status:'Aguardando atendimento',
+      createdAt:new Date().toISOString(),
+      messages:[{from:'support',text:'Olá! Bem-vindo ao suporte do VYBE. Conte para nós como podemos ajudar.',at:new Date().toISOString()}]
+    };
+    const all = getSupportTickets(); all.unshift(ticket); saveSupportTickets(all);
+    selectedSupportTicketId = ticket.id;
+  } else {
+    selectedSupportTicketId = tickets[0].id;
+  }
+  renderSupport();
+  document.getElementById('supportThread')?.scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('supportMessageInput')?.focus();
+}
+function renderSupport(){
+  const all = getSupportTickets();
+  const mine = all.filter(t => t.userEmail === supportUserKey());
+  const list = document.getElementById('supportTicketList');
+  if(list){
+    list.innerHTML = mine.map(t => `<button class="support-ticket ${t.id===selectedSupportTicketId?'active':''}" onclick="selectSupportTicket('${t.id}')">${safeText(t.id)} · ${safeText(t.status)}</button>`).join('');
+  }
+  const ticket = mine.find(t => t.id === selectedSupportTicketId) || mine[0];
+  if(ticket) selectedSupportTicketId = ticket.id;
+  const thread = document.getElementById('supportThread');
+  const compose = document.getElementById('supportCompose');
+  if(thread){
+    thread.innerHTML = ticket ? ticket.messages.map(m => `<div class="support-message ${m.from==='user'?'mine':(m.from==='admin'?'admin':'')}">${safeText(m.text)}<small>${m.from==='user'?'Você':(m.from==='admin'?'Admin VYBE':'Suporte VYBE')} · ${new Date(m.at).toLocaleString('pt-BR')}</small></div>`).join('') : '<div class="empty-support"><strong>Nenhum chamado aberto</strong><p class="small muted">Toque em “Falar com Admin” para iniciar.</p></div>';
+  }
+  if(compose) compose.hidden = !ticket;
+  const adminPanel = document.getElementById('supportAdminPanel');
+  const isAdmin = supportUserKey() === SUPPORT_ADMIN_EMAIL;
+  if(adminPanel) adminPanel.hidden = !isAdmin;
+  if(isAdmin) renderAdminTickets();
+}
+function selectSupportTicket(id){selectedSupportTicketId=id;renderSupport();}
+function sendSupportMessage(event){
+  event.preventDefault();
+  const input=document.getElementById('supportMessageInput'),value=input.value.trim();
+  if(!value || !currentUser)return;
+  const tickets=getSupportTickets(),ticket=tickets.find(t=>t.id===selectedSupportTicketId && t.userEmail===supportUserKey());
+  if(!ticket){alert('Abra um chamado antes de enviar uma mensagem.');return;}
+  ticket.messages.push({from:'user',text:value,at:new Date().toISOString()});
+  ticket.status='Aguardando atendimento';saveSupportTickets(tickets);input.value='';renderSupport();
+}
+function renderAdminTickets(){
+  const tickets=getSupportTickets(),list=document.getElementById('adminTicketList');
+  if(!list)return;
+  list.innerHTML=tickets.length?tickets.map(t=>`<button class="support-ticket ${t.id===selectedAdminTicketId?'active':''}" onclick="selectAdminTicket('${t.id}')">${safeText(t.id)} · ${safeText(t.userName)} · ${safeText(t.status)}</button>`).join(''):'<p class="small muted">Nenhum chamado recebido neste navegador.</p>';
+  const ticket=tickets.find(t=>t.id===selectedAdminTicketId);
+  const area=document.getElementById('adminReplyArea'),thread=document.getElementById('adminSelectedThread');
+  if(area)area.hidden=!ticket;
+  if(thread && ticket)thread.innerHTML=ticket.messages.map(m=>`<div class="support-message ${m.from==='user'?'':'admin'}">${safeText(m.text)}<small>${m.from==='user'?safeText(m.userName||'Usuário'):(m.from==='admin'?'Admin VYBE':'Suporte VYBE')} · ${new Date(m.at).toLocaleString('pt-BR')}</small></div>`).join('');
+}
+function selectAdminTicket(id){selectedAdminTicketId=id;renderAdminTickets();}
+function sendAdminReply(event){
+  event.preventDefault();
+  if(supportUserKey()!==SUPPORT_ADMIN_EMAIL){alert('Acesso administrativo não autorizado.');return;}
+  const input=document.getElementById('adminReplyInput'),value=input.value.trim();if(!value)return;
+  const tickets=getSupportTickets(),ticket=tickets.find(t=>t.id===selectedAdminTicketId);if(!ticket)return;
+  ticket.messages.push({from:'admin',text:value,at:new Date().toISOString()});ticket.status='Em atendimento';
+  saveSupportTickets(tickets);input.value='';renderAdminTickets();
+}
+
+function hydratePostActions(){
+ document.querySelectorAll('.post-actions[data-post-id]').forEach(actions=>{
+  const id=actions.dataset.postId,state=getPostState(id,parseInt(actions.querySelector('.like-count')?.textContent||'0',10),parseInt(actions.querySelector('.comment-count')?.textContent||'0',10));
+  if(!getPostStates()[id])savePostState(id,state);
+  const like=actions.querySelector('.like-btn');if(like){like.classList.toggle('liked',!!state.liked);like.innerHTML=(state.liked?'♥':'♡')+' <span class="like-count">'+(state.likes??0)+'</span> curtidas'}
+  const comments=actions.querySelector('.comment-count');if(comments)comments.textContent=String((state.baseComments||parseInt(comments.textContent||'0',10))+(state.comments?.length||0));
+ });
+}
+
+// Protótipo local: cadastro e dados ficam apenas neste navegador/dispositivo.
+const demoPeople=[
+ {name:'Marina Costa',id:'VYB-482193',handle:'@marina',initial:'M'},
+ {name:'Rafael Lima',id:'VYB-731604',handle:'@rafael',initial:'R'},
+ {name:'Julia Santos',id:'VYB-295817',handle:'@julia',initial:'J'},
+ {name:'Caio Mendes',id:'VYB-618420',handle:'@caio',initial:'C'}
+];
+let currentUser=null, friends=[];
+function getUsers(){try{return JSON.parse(localStorage.getItem('vybe_users')||'[]')}catch(e){return []}}
+function saveUsers(users){localStorage.setItem('vybe_users',JSON.stringify(users))}
+function makeId(){return 'VYB-'+Math.floor(100000+Math.random()*900000)}
+function showAuth(mode='login'){
+ let old=document.getElementById('authScreen');if(old)old.remove();
+ const box=document.createElement('div');box.className='auth-screen';box.id='authScreen';
+ box.innerHTML=`<div class="auth-box"><div class="auth-logo">VYBE<span>.</span></div><div class="eyebrow">SUA COMUNIDADE. SUA IDENTIDADE.</div><div id="authContent"></div></div>`;
+ document.body.appendChild(box);renderAuth(mode);
+}
+function renderAuth(mode){
+ const c=document.getElementById('authContent');
+ if(mode==='register'){
+ c.innerHTML=`<h1>Crie sua conta</h1><p>Configure seu perfil antes de entrar na comunidade.</p>
+ <label class="field">Nome de exibição</label><input class="field-input" id="regName" autocomplete="name" placeholder="Como as pessoas vão te chamar">
+ <label class="field">Nome de usuário</label><input class="field-input" id="regHandle" autocomplete="username" placeholder="ex.: ana_silva">
+ <label class="field">E-mail</label><input class="field-input" id="regEmail" type="email" autocomplete="email" placeholder="voce@email.com">
+ <label class="field">Senha</label><input class="field-input" id="regPass" type="password" autocomplete="new-password" placeholder="Crie uma senha">
+ <label class="field">Sobre você (opcional)</label><input class="field-input" id="regBio" placeholder="Uma frase sobre você">
+ <button class="btn" onclick="registerUser()">Criar conta e entrar</button><button class="auth-switch" onclick="renderAuth('login')">Já tenho uma conta · Entrar</button>`;
+ }else{
+ c.innerHTML=`<h1>Bem-vindo ao VYBE</h1><p>Entre na sua conta ou crie seu perfil para começar.</p>
+ <label class="field">E-mail</label><input class="field-input" id="loginEmail" type="email" autocomplete="email" placeholder="voce@email.com">
+ <label class="field">Senha</label><input class="field-input" id="loginPass" type="password" autocomplete="current-password" placeholder="Sua senha">
+ <button class="btn" onclick="loginUser()">Entrar</button><button class="auth-switch" onclick="renderAuth('register')">Ainda não tem conta? Criar conta</button>`;
+ }
+}
+function registerUser(){
+ const name=document.getElementById('regName').value.trim(),handle=document.getElementById('regHandle').value.trim().replace(/^@/,''),email=document.getElementById('regEmail').value.trim().toLowerCase(),pass=document.getElementById('regPass').value,bio=document.getElementById('regBio').value.trim();
+ if(!name||!handle||!email||!pass){alert('Preencha nome, usuário, e-mail e senha.');return}
+ if(!/^[a-zA-Z0-9_.]{3,20}$/.test(handle)){alert('O usuário deve ter 3 a 20 caracteres: letras, números, ponto ou _.');return}
+ if(pass.length<6){alert('A senha precisa ter pelo menos 6 caracteres.');return}
+ const users=getUsers();if(users.some(u=>u.email===email||u.handle.toLowerCase()===handle.toLowerCase())){alert('Este e-mail ou nome de usuário já está cadastrado neste dispositivo.');return}
+ const user={name,handle,email,pass,bio,id:makeId(),friends:[]};users.push(user);saveUsers(users);enterApp(user);
+}
+function loginUser(){
+ const email=document.getElementById('loginEmail').value.trim().toLowerCase(),pass=document.getElementById('loginPass').value;
+ const user=getUsers().find(u=>u.email===email&&u.pass===pass);if(!user){alert('E-mail ou senha incorretos neste dispositivo.');return}enterApp(user);
+}
+function enterApp(user){currentUser=user;friends=user.friends||[];localStorage.setItem('vybe_session',user.email);document.getElementById('authScreen')?.remove();refreshProfile();showView('home');if(document.getElementById('support'))renderSupport();}
+function logout(){localStorage.removeItem('vybe_session');currentUser=null;showAuth('login')}
+function refreshProfile(){
+ if(!currentUser)return;
+ const initials=currentUser.name.split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+ document.getElementById('profileAvatar').textContent=initials;document.getElementById('profileName').textContent=currentUser.name;document.getElementById('profileHandle').textContent='@'+currentUser.handle;document.getElementById('profileId').textContent='ID: '+currentUser.id;document.getElementById('profileBio').textContent=currentUser.bio||'Conte um pouco sobre você.';document.getElementById('friendCount').textContent=friends.length;
+ document.querySelector('.profile-mini .avatar').textContent=initials;document.querySelector('.profile-mini strong').textContent=currentUser.name;document.querySelector('.profile-mini .small').textContent='ID '+currentUser.id;
+ const list=document.getElementById('friendList');list.innerHTML=friends.length?friends.map(f=>`<div class="friend-row"><div class="avatar">${safeText(f.initial||f.name[0])}</div><div style="flex:1"><strong>${safeText(f.name)}</strong><div class="small muted">${safeText(f.id)}</div></div><span class="pill">Amigo</span></div>`).join(''):'<p class="muted small">Você ainda não adicionou amigos.</p>';
+}
+function safeText(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function searchFriends(){
+ const q=document.getElementById('friendSearch').value.trim().toLowerCase(),out=document.getElementById('friendResults');if(!q){out.innerHTML='<p class="small muted">Digite um nome ou ID para buscar.</p>';return}
+ const all=[...demoPeople,...getUsers().filter(u=>u.id!==currentUser.id).map(u=>({name:u.name,id:u.id,handle:'@'+u.handle,initial:u.name[0]}))];
+ const matches=all.filter(p=>p.id.toLowerCase()===q||p.name.toLowerCase().includes(q)||p.handle.toLowerCase().includes(q)).filter(p=>!friends.some(f=>f.id===p.id));
+ out.innerHTML=matches.length?matches.map((p,i)=>`<div class="friend-row"><div class="avatar">${safeText(p.initial)}</div><div style="flex:1"><strong>${safeText(p.name)}</strong><div class="small muted">${safeText(p.id)}</div></div><button class="btn secondary" onclick="addFriend('${p.id}')">Adicionar</button></div>`).join(''):'<p class="small muted">Ninguém encontrado. Confira o nome ou ID.</p>';
+}
+function addFriend(id){
+ const p=[...demoPeople,...getUsers().filter(u=>u.id!==currentUser.id).map(u=>({name:u.name,id:u.id,initial:u.name[0]}))].find(x=>x.id===id);if(!p||friends.some(f=>f.id===id))return;
+ friends.push({name:p.name,id:p.id,initial:p.initial||p.name[0]});currentUser.friends=friends;const users=getUsers();const idx=users.findIndex(u=>u.id===currentUser.id);if(idx>=0){users[idx]=currentUser;saveUsers(users)}refreshProfile();searchFriends();
+}
+function editProfile(){const name=prompt('Nome de exibição:',currentUser.name);if(name===null||!name.trim())return;const bio=prompt('Sobre você:',currentUser.bio||'');if(bio===null)return;currentUser.name=name.trim();currentUser.bio=bio.trim();const users=getUsers(),i=users.findIndex(u=>u.id===currentUser.id);if(i>=0){users[i]=currentUser;saveUsers(users)}refreshProfile()}
+hydratePostActions();const savedSession=localStorage.getItem('vybe_session');const savedUser=getUsers().find(u=>u.email===savedSession);if(savedUser)enterApp(savedUser);else showAuth('login');
+
+</script>
+</body></html>
