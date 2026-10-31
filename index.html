@@ -629,20 +629,31 @@ async function registerUser(){
  if(pass.length<6){alert('A senha precisa ter pelo menos 6 caracteres.');return}
  try{
   await initFirebase();
+  let credential;
+  try{
+   credential=await fbFns.createUserWithEmailAndPassword(fbAuth,email,pass);
+  }catch(createError){
+   if(createError.code!=='auth/email-already-in-use')throw createError;
+   // Permite concluir um cadastro cujo usuário Auth foi criado,
+   // mas cujo perfil Firestore falhou na tentativa anterior.
+   credential=await fbFns.signInWithEmailAndPassword(fbAuth,email,pass);
+  }
   const q=fbFns.query(fbFns.collection(fbDb,'users'),fbFns.where('handle','==',handle.toLowerCase()));
   const existing=await fbFns.getDocs(q);
-  if(!existing.empty){alert('Este nome de usuário já está em uso.');return}
-  const credential=await fbFns.createUserWithEmailAndPassword(fbAuth,email,pass);
-  const user={uid:credential.user.uid,name,handle:handle.toLowerCase(),email,bio,publicId:makeId(),createdAt:fbFns.serverTimestamp(),updatedAt:fbFns.serverTimestamp()};
-  await fbFns.setDoc(fbFns.doc(fbDb,'users',credential.user.uid),user);
-  enterApp({...user,id:user.publicId,friends:[]});
+  if(existing.docs.some(d=>d.id!==credential.user.uid)){
+   alert('Este nome de usuário já está em uso. Escolha outro.');return;
+  }
+  const user={name,handle:handle.toLowerCase(),email,bio,publicId:makeId(),createdAt:fbFns.serverTimestamp(),updatedAt:fbFns.serverTimestamp()};
+  const profileRef=fbFns.doc(fbDb,'users',credential.user.uid);
+  const profileSnap=await fbFns.getDoc(profileRef);
+  if(profileSnap.exists()){
+   const old=profileSnap.data();
+   user.publicId=old.publicId||user.publicId;
+   user.createdAt=old.createdAt||user.createdAt;
+  }
+  await fbFns.setDoc(profileRef,user);
+  enterApp({...user,uid:credential.user.uid,id:user.publicId,friends:[]});
  }catch(e){console.error(e);alert(firebaseErrorMessage(e))}
-}
-async function loginUser(){
- const email=document.getElementById('loginEmail').value.trim().toLowerCase(),pass=document.getElementById('loginPass').value;
- if(!email||!pass){alert('Informe seu e-mail e sua senha.');return}
- try{await initFirebase();await fbFns.signInWithEmailAndPassword(fbAuth,email,pass);}
- catch(e){console.error(e);alert(firebaseErrorMessage(e))}
 }
 function firebaseErrorMessage(e){
  const map={'auth/email-already-in-use':'Este e-mail já possui uma conta.','auth/invalid-email':'O e-mail informado é inválido.','auth/weak-password':'A senha precisa ter pelo menos 6 caracteres.','auth/invalid-credential':'E-mail ou senha incorretos.','auth/network-request-failed':'Falha de conexão. Verifique sua internet.'};
@@ -685,7 +696,7 @@ initFirebase().then(()=>{
   if(!authUser){currentUser=null;if(!document.getElementById('authScreen'))showAuth('login');return}
   try{
    const snap=await fbFns.getDoc(fbFns.doc(fbDb,'users',authUser.uid));
-   if(!snap.exists()){await fbFns.signOut(fbAuth);alert('Perfil não encontrado. Entre em contato com o suporte.');return}
+   if(!snap.exists()){console.warn('Conta autenticada sem perfil Firestore. Volte ao cadastro para concluir a criação do perfil.');return}
    const data=snap.data();enterApp({...data,uid:authUser.uid,id:data.publicId,friends:[]});
   }catch(e){console.error(e);alert(firebaseErrorMessage(e))}
  });
