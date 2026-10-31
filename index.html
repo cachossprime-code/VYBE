@@ -564,7 +564,31 @@ function hydratePostActions(){
  });
 }
 
-// Protótipo local: cadastro e dados ficam apenas neste navegador/dispositivo.
+// Firebase Web SDK — Authentication e perfil inicial no Cloud Firestore.
+const firebaseConfig = {
+ apiKey: "AIzaSyCOhUoifGYSP01g416thHRNiDmF0SLXKkC",
+ authDomain: "vybe-e8b6c.firebaseapp.com",
+ projectId: "vybe-e8b6c",
+ storageBucket: "vybe-e8b6c.firebasestorage.app",
+ messagingSenderId: "459404608012",
+ appId: "1:459404608012:web:4a7613c42b44b7344b6429"
+};
+let firebaseReady=null, fbAuth=null, fbDb=null, fbFns=null;
+async function initFirebase(){
+ if(firebaseReady)return firebaseReady;
+ firebaseReady=(async()=>{
+  const [appSdk,authSdk,dbSdk]=await Promise.all([
+   import('https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js'),
+   import('https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js'),
+   import('https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js')
+  ]);
+  const app=appSdk.initializeApp(firebaseConfig);
+  fbAuth=authSdk.getAuth(app);fbDb=dbSdk.getFirestore(app);
+  fbFns={...authSdk,...dbSdk};
+  return true;
+ })().catch(err=>{firebaseReady=null;throw err});
+ return firebaseReady;
+}
 const demoPeople=[
  {name:'Marina Costa',id:'VYB-482193',handle:'@marina',initial:'M'},
  {name:'Rafael Lima',id:'VYB-731604',handle:'@rafael',initial:'R'},
@@ -598,40 +622,74 @@ function renderAuth(mode){
  <button class="btn" onclick="loginUser()">Entrar</button><button class="auth-switch" onclick="renderAuth('register')">Ainda não tem conta? Criar conta</button>`;
  }
 }
-function registerUser(){
+async function registerUser(){
  const name=document.getElementById('regName').value.trim(),handle=document.getElementById('regHandle').value.trim().replace(/^@/,''),email=document.getElementById('regEmail').value.trim().toLowerCase(),pass=document.getElementById('regPass').value,bio=document.getElementById('regBio').value.trim();
  if(!name||!handle||!email||!pass){alert('Preencha nome, usuário, e-mail e senha.');return}
  if(!/^[a-zA-Z0-9_.]{3,20}$/.test(handle)){alert('O usuário deve ter 3 a 20 caracteres: letras, números, ponto ou _.');return}
  if(pass.length<6){alert('A senha precisa ter pelo menos 6 caracteres.');return}
- const users=getUsers();if(users.some(u=>u.email===email||u.handle.toLowerCase()===handle.toLowerCase())){alert('Este e-mail ou nome de usuário já está cadastrado neste dispositivo.');return}
- const user={name,handle,email,pass,bio,id:makeId(),friends:[]};users.push(user);saveUsers(users);enterApp(user);
+ try{
+  await initFirebase();
+  const q=fbFns.query(fbFns.collection(fbDb,'users'),fbFns.where('handle','==',handle.toLowerCase()));
+  const existing=await fbFns.getDocs(q);
+  if(!existing.empty){alert('Este nome de usuário já está em uso.');return}
+  const credential=await fbFns.createUserWithEmailAndPassword(fbAuth,email,pass);
+  const user={uid:credential.user.uid,name,handle:handle.toLowerCase(),email,bio,publicId:makeId(),createdAt:fbFns.serverTimestamp(),updatedAt:fbFns.serverTimestamp()};
+  await fbFns.setDoc(fbFns.doc(fbDb,'users',credential.user.uid),user);
+  enterApp({...user,id:user.publicId,friends:[]});
+ }catch(e){console.error(e);alert(firebaseErrorMessage(e))}
 }
-function loginUser(){
+async function loginUser(){
  const email=document.getElementById('loginEmail').value.trim().toLowerCase(),pass=document.getElementById('loginPass').value;
- const user=getUsers().find(u=>u.email===email&&u.pass===pass);if(!user){alert('E-mail ou senha incorretos neste dispositivo.');return}enterApp(user);
+ if(!email||!pass){alert('Informe seu e-mail e sua senha.');return}
+ try{await initFirebase();await fbFns.signInWithEmailAndPassword(fbAuth,email,pass);}
+ catch(e){console.error(e);alert(firebaseErrorMessage(e))}
 }
-function enterApp(user){currentUser=user;friends=user.friends||[];localStorage.setItem('vybe_session',user.email);document.getElementById('authScreen')?.remove();refreshProfile();showView('home');if(document.getElementById('support'))renderSupport();}
-function logout(){localStorage.removeItem('vybe_session');currentUser=null;showAuth('login')}
+function firebaseErrorMessage(e){
+ const map={'auth/email-already-in-use':'Este e-mail já possui uma conta.','auth/invalid-email':'O e-mail informado é inválido.','auth/weak-password':'A senha precisa ter pelo menos 6 caracteres.','auth/invalid-credential':'E-mail ou senha incorretos.','auth/network-request-failed':'Falha de conexão. Verifique sua internet.'};
+ return map[e.code]||('Não foi possível concluir. '+(e.message||'Tente novamente.'));
+}
+async function enterApp(user){
+ currentUser=user;friends=user.friends||[];document.getElementById('authScreen')?.remove();refreshProfile();showView('home');if(document.getElementById('support'))renderSupport();
+}
+async function logout(){
+ try{await initFirebase();await fbFns.signOut(fbAuth);}catch(e){console.error(e)}
+ currentUser=null;friends=[];showAuth('login');
+}
 function refreshProfile(){
  if(!currentUser)return;
  const initials=currentUser.name.split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
- document.getElementById('profileAvatar').textContent=initials;document.getElementById('profileName').textContent=currentUser.name;document.getElementById('profileHandle').textContent='@'+currentUser.handle;document.getElementById('profileId').textContent='ID: '+currentUser.id;document.getElementById('profileBio').textContent=currentUser.bio||'Conte um pouco sobre você.';document.getElementById('friendCount').textContent=friends.length;
- document.querySelector('.profile-mini .avatar').textContent=initials;document.querySelector('.profile-mini strong').textContent=currentUser.name;document.querySelector('.profile-mini .small').textContent='ID '+currentUser.id;
+ document.getElementById('profileAvatar').textContent=initials;document.getElementById('profileName').textContent=currentUser.name;document.getElementById('profileHandle').textContent='@'+currentUser.handle;document.getElementById('profileId').textContent='ID: '+(currentUser.publicId||currentUser.id);document.getElementById('profileBio').textContent=currentUser.bio||'Conte um pouco sobre você.';document.getElementById('friendCount').textContent=friends.length;
+ document.querySelector('.profile-mini .avatar').textContent=initials;document.querySelector('.profile-mini strong').textContent=currentUser.name;document.querySelector('.profile-mini .small').textContent='ID '+(currentUser.publicId||currentUser.id);
  const list=document.getElementById('friendList');list.innerHTML=friends.length?friends.map(f=>`<div class="friend-row"><div class="avatar">${safeText(f.initial||f.name[0])}</div><div style="flex:1"><strong>${safeText(f.name)}</strong><div class="small muted">${safeText(f.id)}</div></div><span class="pill">Amigo</span></div>`).join(''):'<p class="muted small">Você ainda não adicionou amigos.</p>';
 }
 function safeText(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function searchFriends(){
  const q=document.getElementById('friendSearch').value.trim().toLowerCase(),out=document.getElementById('friendResults');if(!q){out.innerHTML='<p class="small muted">Digite um nome ou ID para buscar.</p>';return}
- const all=[...demoPeople,...getUsers().filter(u=>u.id!==currentUser.id).map(u=>({name:u.name,id:u.id,handle:'@'+u.handle,initial:u.name[0]}))];
- const matches=all.filter(p=>p.id.toLowerCase()===q||p.name.toLowerCase().includes(q)||p.handle.toLowerCase().includes(q)).filter(p=>!friends.some(f=>f.id===p.id));
- out.innerHTML=matches.length?matches.map((p,i)=>`<div class="friend-row"><div class="avatar">${safeText(p.initial)}</div><div style="flex:1"><strong>${safeText(p.name)}</strong><div class="small muted">${safeText(p.id)}</div></div><button class="btn secondary" onclick="addFriend('${p.id}')">Adicionar</button></div>`).join(''):'<p class="small muted">Ninguém encontrado. Confira o nome ou ID.</p>';
+ out.innerHTML='<p class="small muted">A busca global de pessoas será conectada na próxima etapa.</p>';
 }
-function addFriend(id){
- const p=[...demoPeople,...getUsers().filter(u=>u.id!==currentUser.id).map(u=>({name:u.name,id:u.id,initial:u.name[0]}))].find(x=>x.id===id);if(!p||friends.some(f=>f.id===id))return;
- friends.push({name:p.name,id:p.id,initial:p.initial||p.name[0]});currentUser.friends=friends;const users=getUsers();const idx=users.findIndex(u=>u.id===currentUser.id);if(idx>=0){users[idx]=currentUser;saveUsers(users)}refreshProfile();searchFriends();
+function addFriend(id){alert('A adição de amigos será conectada ao Firestore na próxima etapa.');}
+async function editProfile(){
+ if(!currentUser)return;
+ const name=prompt('Nome de exibição:',currentUser.name);if(name===null||!name.trim())return;
+ const bio=prompt('Sobre você:',currentUser.bio||'');if(bio===null)return;
+ try{await initFirebase();const updated={name:name.trim(),bio:bio.trim(),updatedAt:fbFns.serverTimestamp()};
+ await fbFns.updateDoc(fbFns.doc(fbDb,'users',currentUser.uid),updated);
+ currentUser.name=updated.name;currentUser.bio=updated.bio;refreshProfile();
+ }catch(e){console.error(e);alert(firebaseErrorMessage(e))}
 }
-function editProfile(){const name=prompt('Nome de exibição:',currentUser.name);if(name===null||!name.trim())return;const bio=prompt('Sobre você:',currentUser.bio||'');if(bio===null)return;currentUser.name=name.trim();currentUser.bio=bio.trim();const users=getUsers(),i=users.findIndex(u=>u.id===currentUser.id);if(i>=0){users[i]=currentUser;saveUsers(users)}refreshProfile()}
-hydratePostActions();const savedSession=localStorage.getItem('vybe_session');const savedUser=getUsers().find(u=>u.email===savedSession);if(savedUser)enterApp(savedUser);else showAuth('login');
+
+hydratePostActions();
+showAuth('login');
+initFirebase().then(()=>{
+ fbFns.onAuthStateChanged(fbAuth,async authUser=>{
+  if(!authUser){currentUser=null;if(!document.getElementById('authScreen'))showAuth('login');return}
+  try{
+   const snap=await fbFns.getDoc(fbFns.doc(fbDb,'users',authUser.uid));
+   if(!snap.exists()){await fbFns.signOut(fbAuth);alert('Perfil não encontrado. Entre em contato com o suporte.');return}
+   const data=snap.data();enterApp({...data,uid:authUser.uid,id:data.publicId,friends:[]});
+  }catch(e){console.error(e);alert(firebaseErrorMessage(e))}
+ });
+}).catch(e=>{console.error(e);alert('Não foi possível conectar ao Firebase. Verifique a configuração e tente recarregar.');});
 
 </script>
 </body></html>
