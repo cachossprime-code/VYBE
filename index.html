@@ -643,7 +643,7 @@ async function registerUser(){
   if(existing.docs.some(d=>d.id!==credential.user.uid)){
    alert('Este nome de usuário já está em uso. Escolha outro.');return;
   }
-  const user={name,handle:handle.toLowerCase(),email,bio,publicId:makeId(),createdAt:fbFns.serverTimestamp(),updatedAt:fbFns.serverTimestamp()};
+  const user={name,handle:handle.toLowerCase(),bio,publicId:makeId(),createdAt:fbFns.serverTimestamp(),updatedAt:fbFns.serverTimestamp()};
   const profileRef=fbFns.doc(fbDb,'users',credential.user.uid);
   const profileSnap=await fbFns.getDoc(profileRef);
   if(profileSnap.exists()){
